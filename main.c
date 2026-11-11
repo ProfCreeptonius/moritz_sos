@@ -60,8 +60,9 @@ char *readline(FILE *fp) {
 
 int main(void) {
   FILE *fp = fopen("foo.txt", "r");
-
-  char *line;
+  if (fp == NULL) {
+    panic("Cannot open file foo.txt for reading");
+  }
 
   for (;;) {
     char *line = readline(fp);
