@@ -1,0 +1,3 @@
+Hello from file!
+Here is another line.
+Okay, bye from file...

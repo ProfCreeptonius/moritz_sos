@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void panic(const char *message) {
-  fprintf(stderr, "%s", message);
+  fprintf(stderr, "%s\n", message);
   exit(-1);
 }
 
