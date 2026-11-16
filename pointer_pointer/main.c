@@ -97,10 +97,7 @@ long my_strtol(const char *string, const char **bad_char_address, int base) {
   const char* current_char_ptr = string;  
   while (*current_char_ptr != '\0') {
     if (!is_digit(*current_char_ptr)) {
-      if (bad_char_address != NULL) {
-        *bad_char_address = current_char_ptr;
-      }
-      return 0;
+      break;
     }
     result += char_to_long(*current_char_ptr);
     result *= base;
@@ -125,7 +122,7 @@ int test_my_strtol(const char *string, int base) {
   if (my_bad_char == NULL && stdlib_bad_char == NULL) {
     return my_value == stdlib_value;
   }
-  return my_bad_char == stdlib_bad_char;
+  return my_bad_char == stdlib_bad_char && my_value == stdlib_value;
 }
 
 int main() {
