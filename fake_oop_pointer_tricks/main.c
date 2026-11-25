@@ -39,6 +39,8 @@ struct ObiWan {
   struct LivingBeing base;
 };
 
+// Now for the implementations of the actual methods.
+// Since there are no methods in C, we need to explicitly pass *this.
 void sayHelloCat(struct Cat *this) {
   printf("Meow, I'm a cat, I have %i lives!\n", this->lives);
 }
@@ -71,6 +73,7 @@ void introduceAll(struct LivingBeing **livingBeings, size_t count) {
 }
 
 int main() {
+  // Let's make the three objects. Remember to give them their proper vtable pointer.
   struct Cat cat = {CatVtable, 9};
   struct Dog dog = {DogVtable, "Laika"};
   struct ObiWan obiWan = {ObiWanVtable};
