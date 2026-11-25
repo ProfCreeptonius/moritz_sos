@@ -8,9 +8,10 @@
 #include <stddef.h>
 #include <stdio.h>
 
-// This is our interface. We wish to override its methods. For that, we use a
-// common trick employed by almost all OOP languages, called a virtual table
-// pointer.
+// This is our interface. We wish to override its methods. But of course, in C,
+// there are no member functions or methods in structs. So for that, we use a
+// common trick employed by almost all OOP languages behind the scenes, called a
+// virtual table pointer.
 struct LivingBeing {
   // This pointer points to an array of method pointers
   // Each method is a function pointer in this array
@@ -21,10 +22,12 @@ struct LivingBeing {
 
 // Let's typedef the signature of the sayHello function
 typedef void (*sayHelloSignature)(struct LivingBeing *this);
+// SAY_HELLO_OFFSET records that sayHello will be the first (so at index 0)
+// method of the table.
 const size_t SAY_HELLO_OFFSET = 0;
 
 // Here are the three classes. No inheritance in C, so they just accept the base
-// as a member. class.
+// as a member field.
 struct Cat {
   struct LivingBeing base;
   int lives;
@@ -51,7 +54,8 @@ void sayHelloDog(struct Dog *this) {
 
 void sayHelloObiWan(struct ObiWan *this) { printf("Hello there!\n"); }
 
-// And let's make the method tables
+// And let's make the method tables. As promised, a pointer to the sayHello
+// function will be at index 0 in each of the tables.
 void *CatVtable[] = {&sayHelloCat};
 void *DogVtable[] = {&sayHelloDog};
 void *ObiWanVtable[] = {&sayHelloObiWan};
@@ -68,16 +72,20 @@ void sayHello(struct LivingBeing *this) {
 
 void introduceAll(struct LivingBeing **livingBeings, size_t count) {
   for (size_t i = 0; i < count; ++i) {
+    // Polymorphism go BRRRRR
     sayHello(livingBeings[i]);
   }
 }
 
 int main() {
-  // Let's make the three objects. Remember to give them their proper vtable pointer.
+  // Let's make the three objects. Remember to give them their proper vtable
+  // pointer.
   struct Cat cat = {CatVtable, 9};
   struct Dog dog = {DogVtable, "Laika"};
   struct ObiWan obiWan = {ObiWanVtable};
 
+  // Casting to a pointer to the first field of the struct is explicitly allowed
+  // by C standard.
   struct LivingBeing *livingBeings[3] = {(struct LivingBeing *)&cat,
                                          (struct LivingBeing *)&dog,
                                          (struct LivingBeing *)&obiWan};
