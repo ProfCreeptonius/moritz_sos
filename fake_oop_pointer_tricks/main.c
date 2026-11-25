@@ -71,6 +71,8 @@ void sayHello(struct LivingBeing *this) {
 }
 
 void introduceAll(struct LivingBeing **livingBeings, size_t count) {
+  // Pointer-pointer here,           ^^
+  // because this is an array of pointers.
   for (size_t i = 0; i < count; ++i) {
     // Polymorphism go BRRRRR
     sayHello(livingBeings[i]);
